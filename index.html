@@ -1,114 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gayatri Japam Counter</title>
-  <style>
-    /* Global Styles */
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-      background: url('https://applescoop.org/image/wallpapers/watch/colorful-burst-of-swirly-colors-abstract-21-09-2024-1726919980.webp') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-    #counter {
-      font-size: 5rem;
-      font-weight: bold;
-      margin: 2rem;
-      padding: 2rem;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 1rem;
-      cursor: pointer;
-    }
-    #leaderboard {
-      margin-top: 2rem;
-      padding: 1rem;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 1rem;
-      max-height: 300px;
-      overflow-y: auto;
-      width: 80%;
-    }
-    #leaderboard ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    #leaderboard li {
-      margin: 0.5rem 0;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gayatri Japam Counter</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Text:wght@400;700&display=swap');
+
+  body {
+    margin: 0; padding: 0;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    background: url('https://applescoop.org/image/wallpapers/watch/colorful-burst-of-swirly-colors-abstract-21-09-2024-1726919980.webp') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 2rem auto;
+    background: rgba(0,0,0,0.5);
+    border-radius: 20px;
+    padding: 20px;
+  }
+  h1 {
+    font-weight: 700;
+    font-size: 2.8rem;
+    margin: 0 0 1rem;
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin: 0.8rem 0 0.3rem;
+    font-weight: 600;
+  }
+  input, select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+  }
+  button {
+    margin-top: 1.5rem;
+    padding: 0.8rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    background: #f4f4f5;
+    color: #222;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #ddd;
+  }
+  #leaderboard {
+    margin-top: 1.5rem;
+    background: rgba(255 255 255 / 0.2);
+    border-radius: 15px;
+    padding: 1rem;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  #leaderboard h2 {
+    margin-top: 0; margin-bottom: 0.8rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+    border-bottom: 2px solid white;
+    padding-bottom: 0.3rem;
+  }
+  #leaderboard ul {
+    margin: 0; padding: 0; list-style: none;
+  }
+  #leaderboard li {
+    margin-bottom: 0.3rem;
+    font-size: 1.1rem;
+    display: flex; justify-content: space-between;
+  }
+  #counterScreen {
+    flex-grow: 1;
+    font-size: 8rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    cursor: pointer;
+    background: rgba(0,0,0,0.7);
+    border-radius: 20px;
+    margin-top: 20px;
+    color: white;
+    letter-spacing: 0.1em;
+  }
+  #summaryScreen {
+    margin-top: 1rem;
+    background: rgba(255 255 255 / 0.15);
+    padding: 1rem;
+    border-radius: 15px;
+    display: none;
+  }
+  #summaryScreen h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  #summaryScreen p {
+    margin: 0.3rem 0;
+    font-size: 1.1rem;
+  }
+  #restartBtn {
+    margin-top: 1rem;
+    padding: 0.7rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: none;
+    background: #f4f4f5;
+    color: #222;
+    cursor: pointer;
+  }
+  #restartBtn:hover {
+    background: #ddd;
+  }
+</style>
 </head>
 <body>
+<main id="mainApp">
 
   <h1>Gayatri Japam Counter</h1>
-  <div id="counter" onclick="incrementCounter()">0</div>
+
+  <form id="inputForm">
+    <label for="nameInput">Name</label>
+    <input id="nameInput" type="text" placeholder="Your name" required autocomplete="off" />
+
+    <label for="cityInput">City</label>
+    <input id="cityInput" type="text" placeholder="Your city" required autocomplete="off" />
+
+    <label for="countSelect">Select Count</label>
+    <select id="countSelect" required>
+      <option value="108">108</option>
+      <option value="1008" selected>1008</option>
+      <option value="custom">Custom</option>
+    </select>
+
+    <input id="customCountInput" type="number" placeholder="Enter custom count" min="1" style="display:none; margin-top:10px;" />
+
+    <button type="submit">Start Japam</button>
+  </form>
+
   <div id="leaderboard">
     <h2>Leaderboard</h2>
-    <ul id="leaderboardList"></ul>
+    <ul id="leaderboardList">
+      <li>Loading...</li>
+    </ul>
   </div>
 
-  <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+  <div id="counterScreen" tabindex="0" style="display:none;">0</div>
 
-    // Counter and Leaderboard Variables
-    let counter = 0;
-    const leaderboardList = document.getElementById('leaderboardList');
+  <section id="summaryScreen">
+    <h3>Session Summary</h3>
+    <p id="summaryProper"></p>
+    <p id="summaryFast"></p>
+    <p id="summarySlow"></p>
+    <button id="restartBtn">Restart</button>
+  </section>
 
-    // Increment Counter
-    function incrementCounter() {
-      counter++;
-      document.getElementById('counter').innerText = counter;
-      updateLeaderboard();
+</main>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  // Replace below with your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
+    authDomain: "gayatri-japam-counter.firebaseapp.com",
+    databaseURL: "https://gayatri-japam-counter-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "gayatri-japam-counter",
+    storageBucket: "gayatri-japam-counter.appspot.com",
+    messagingSenderId: "349097142038",
+    appId: "1:349097142038:web:adecc60bdcf58c4cf15237"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // Elements
+  const inputForm = document.getElementById('inputForm');
+  const nameInput = document.getElementById('nameInput');
+  const cityInput = document.getElementById('cityInput');
+  const countSelect = document.getElementById('countSelect');
+  const customCountInput = document.getElementById('customCountInput');
+  const counterScreen = document.getElementById('counterScreen');
+  const leaderboardList = document.getElementById('leaderboardList');
+  const summaryScreen = document.getElementById('summaryScreen');
+  const summaryProper = document.getElementById('summaryProper');
+  const summaryFast = document.getElementById('summaryFast');
+  const summarySlow = document.getElementById('summarySlow');
+  const restartBtn = document.getElementById('restartBtn');
+
+  // Tap timing thresholds (milliseconds)
+  const MIN_TAP_INTERVAL = 2000;
+  const PROPER_LOWER = 7000;
+  const PROPER_UPPER = 10000;
+
+  let isCounting = false;
+  let tapCount = 0;
+  let lastTapTime = 0;
+  let properCount = 0;
+  let quickCount = 0;
+  let slowCount = 0;
+  let targetCount = 1008;
+  let userName = '';
+  let userCity = '';
+
+  // Show/hide custom count input
+  countSelect.addEventListener('change', () => {
+    if(countSelect.value === 'custom'){
+      customCountInput.style.display = 'block';
+      customCountInput.required = true;
+    } else {
+      customCountInput.style.display = 'none';
+      customCountInput.required = false;
+    }
+  });
+
+  // Handle form submit
+  inputForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    userName = nameInput.value.trim() || "Anonymous";
+    userCity = cityInput.value.trim() || "Unknown";
+
+    if(countSelect.value === 'custom') {
+      const customVal = parseInt(customCountInput.value);
+      if(!customVal || customVal < 1){
+        alert("Please enter a valid custom count.");
+        return;
+      }
+      targetCount = customVal;
+    } else {
+      targetCount = parseInt(countSelect.value);
     }
 
-    // Update Leaderboard
-    function updateLeaderboard() {
-      db.collection("leaderboard").orderBy("count", "desc").limit(5).get()
-        .then(snapshot => {
-          leaderboardList.innerHTML = '';
-          snapshot.forEach(doc => {
-            const li = document.createElement('li');
-            li.textContent = `${doc.data().name}: ${doc.data().count}`;
-            leaderboardList.appendChild(li);
-          });
-        });
+    // Reset counters
+    tapCount = 0;
+    lastTapTime = 0;
+    properCount = 0;
+    quickCount = 0;
+    slowCount = 0;
+
+    // Hide form and leaderboard, show counter screen
+    inputForm.style.display = 'none';
+    leaderboardList.parentElement.style.display = 'none';
+    summaryScreen.style.display = 'none';
+    counterScreen.style.display = 'flex';
+    counterScreen.textContent = '0';
+    counterScreen.focus();
+
+    isCounting = true;
+  });
+
+  // Tap counter logic
+  counterScreen.addEventListener('click', () => {
+    if(!isCounting) return;
+    const now = Date.now();
+    if(now - lastTapTime < MIN_TAP_INTERVAL) return;
+
+    tapCount++;
+    if(lastTapTime !== 0){
+      const diff = now - lastTapTime;
+      if(diff >= PROPER_LOWER && diff <= PROPER_UPPER){
+        properCount++;
+      } else if(diff < PROPER_LOWER){
+        quickCount++;
+      } else {
+        slowCount++;
+      }
+    }
+    lastTapTime = now;
+
+    counterScreen.textContent = tapCount;
+
+    if(tapCount >= targetCount){
+      isCounting = false;
+      showSummary();
+      submitToLeaderboard();
+    }
+  });
+
+  // Show summary after completion
+  function showSummary(){
+    counterScreen.style.display = 'none';
+    summaryScreen.style.display = 'block';
+
+    summaryProper.textContent = `Proper Japams: ${properCount}`;
+    summaryFast.textContent = `Too Fast: ${quickCount}`;
+    summarySlow.textContent = `Too Slow: ${slowCount}`;
+  }
+
+  // Restart
+  restartBtn.addEventListener('click', () => {
+    summaryScreen.style.display = 'none';
+    inputForm.style.display = 'block';
+    leaderboardList.parentElement.style.display = 'block';
+    counterScreen.style.display = 'none';
+    tapCount = 0;
+    lastTapTime = 0;
+    properCount = 0;
+    quickCount = 0;
+    slowCount = 0;
+    isCounting = false;
+  });
+
+  // Submit user session to Firebase Realtime Database leaderboard
+  function submitToLeaderboard(){
+    const leaderboardRef = db.ref('leaderboard');
+    leaderboardRef.push({
+      name: userName,
+      city: userCity,
+      count: properCount,
+      timestamp: Date.now()
+    });
+  }
+
+  // Fetch & display live leaderboard (top 10)
+  function updateLeaderboard(snapshot){
+    leaderboardList.innerHTML = '';
+    if(!snapshot || snapshot.exists() === false){
+      leaderboardList.innerHTML = '<li>No entries yet</li>';
+      return;
     }
 
-    // Submit Score
-    function submitScore(name) {
-      db.collection("leaderboard").add({
-        name: name,
-        count: counter
-      }).then(() => {
-        updateLeaderboard();
-      });
-    }
+    // Convert snapshot to array, sort by count desc, timestamp asc (earlier better)
+    const data = [];
+    snapshot.forEach(childSnapshot => {
+      data.push(childSnapshot.val());
+    });
 
-    // Listen for changes in the leaderboard
-    db.collection("leaderboard").onSnapshot(updateLeaderboard);
-  </script>
+    data.sort((a,b) => {
+      if(b.count !== a.count) return b.count - a.count;
+      return a.timestamp - b.timestamp;
+    });
 
+    data.slice(0,10).forEach(entry => {
+      const li = document.createElement('li');
+      li.textContent = `${entry.name} (${entry.city}) - ${entry.count}`;
+      leaderboardList.appendChild(li);
+    });
+  }
+
+  // Listen for changes on leaderboard
+  const leaderboardRef = db.ref('leaderboard');
+  leaderboardRef.on('value', updateLeaderboard);
+
+</script>
 </body>
 </html>
