@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gayatri Japam Counter</title>
   <style>
-    /* Reset and base */
     * {
       box-sizing: border-box;
     }
@@ -91,7 +90,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      position: fixed;  /* full screen overlay */
+      position: fixed;  
       top: 0;
       left: 0;
       z-index: 9999;
@@ -118,6 +117,8 @@
       color: #111;
       font-size: 1.1rem;
       min-height: 6rem;
+      overflow-y: auto;
+      max-height: 250px;
     }
     #leaderboard li {
       border-bottom: 1px solid #ddd;
@@ -185,7 +186,6 @@
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    // Your Firebase config (replace with yours)
     const firebaseConfig = {
       apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
       authDomain: "gayatri-japam-counter.firebaseapp.com",
@@ -326,4 +326,13 @@
     const q = query(collection(db, "sessions"), orderBy("properCount", "desc"), limit(10));
     onSnapshot(q, (snapshot) => {
       leaderboard.innerHTML = "";
-      snapshot
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const li = document.createElement("li");
+        li.textContent = `${data.name} (${data.city}) — Proper Japas: ${data.properCount} / ${data.targetCount}`;
+        leaderboard.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>
