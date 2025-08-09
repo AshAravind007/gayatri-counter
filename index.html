@@ -1,137 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gayatri Japam Counter</title>
-  <style>
-    html, body {
-      margin: 0; padding: 0; height: 100%; width: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      background: url('https://raw.githubusercontent.com/AshAravind007/gayatri-counter/main/assets/bg.webp') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gayatri Japam Counter</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%; width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background:
+      linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+      url('https://raw.githubusercontent.com/AshAravind007/gayatri-counter/main/assets/bg.webp') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
 
-    #inputScreen {
-      margin-top: 3rem;
-      width: 90%;
-      max-width: 400px;
-      background: rgba(255 255 255 / 0.1);
-      border-radius: 15px;
-      padding: 20px 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      backdrop-filter: blur(15px);
-      color: white;
-    }
+  #inputScreen {
+    margin-top: 3rem;
+    width: 90%;
+    max-width: 400px;
+    background: rgba(255 255 255 / 0.1);
+    border-radius: 15px;
+    padding: 20px 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    backdrop-filter: blur(15px);
+    color: white;
+  }
 
-    #inputScreen label {
-      display: block;
-      margin-bottom: 0.25rem;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
+  #inputScreen label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
 
-    #inputScreen input, #inputScreen select {
-      width: 100%;
-      padding: 10px 12px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 1.2rem;
-      background: rgba(255 255 255 / 0.15);
-      color: white;
-      outline: none;
-      font-weight: 600;
-      box-shadow: inset 0 0 5px rgb(255 255 255 / 0.3);
-      transition: background-color 0.3s ease;
-    }
-    #inputScreen input::placeholder {
-      color: rgba(255 255 255 / 0.6);
-    }
-    #inputScreen input:focus, #inputScreen select:focus {
-      background: rgba(255 255 255 / 0.3);
-    }
+  #inputScreen input, #inputScreen select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 1.2rem;
+    background: rgba(255 255 255 / 0.15);
+    color: white;
+    outline: none;
+    font-weight: 600;
+    box-shadow: inset 0 0 5px rgb(255 255 255 / 0.3);
+    transition: background-color 0.3s ease;
+  }
+  #inputScreen input::placeholder {
+    color: rgba(255 255 255 / 0.6);
+  }
+  #inputScreen input:focus, #inputScreen select:focus {
+    background: rgba(255 255 255 / 0.3);
+  }
 
-    #inputScreen button {
-      width: 100%;
-      padding: 12px 0;
-      font-size: 1.2rem;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(45deg, #007aff, #00c6ff);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(0, 122, 255, 0.5);
-      transition: background 0.3s ease;
-    }
-    #inputScreen button:hover {
-      background: linear-gradient(45deg, #005fcc, #00a3cc);
-    }
+  #inputScreen button {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(45deg, #007aff, #00c6ff);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0, 122, 255, 0.5);
+    transition: background 0.3s ease;
+  }
+  #inputScreen button:hover {
+    background: linear-gradient(45deg, #005fcc, #00a3cc);
+  }
 
-    #leaderboard {
-      margin-top: 2rem;
-      width: 90%;
-      max-width: 600px;
-      background: rgba(255 255 255 / 0.1);
-      border-radius: 15px;
-      padding: 15px 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      backdrop-filter: blur(15px);
-      color: white;
-      max-height: 250px;
-      overflow-y: auto;
-      font-weight: 600;
-    }
+  #leaderboard {
+    margin-top: 2rem;
+    width: 90%;
+    max-width: 600px;
+    background: rgba(255 255 255 / 0.1);
+    border-radius: 15px;
+    padding: 15px 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    backdrop-filter: blur(15px);
+    color: white;
+    max-height: 250px;
+    overflow-y: auto;
+    font-weight: 600;
+  }
 
-    #leaderboard h2 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-weight: 700;
-      font-size: 1.4rem;
-      border-bottom: 1px solid rgba(255 255 255 / 0.3);
-      padding-bottom: 0.5rem;
-    }
+  #leaderboard h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.4rem;
+    border-bottom: 1px solid rgba(255 255 255 / 0.3);
+    padding-bottom: 0.5rem;
+  }
 
-    #leaderboard table {
-      width: 100%;
-      border-collapse: collapse;
-      color: white;
-    }
+  #leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+  }
 
-    #leaderboard th, #leaderboard td {
-      padding: 10px 8px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255 255 255 / 0.2);
-    }
+  #leaderboard th, #leaderboard td {
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255 255 255 / 0.2);
+  }
 
-    #counterScreen {
-      flex-grow: 1;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 12rem;
-      font-weight: 900;
-      user-select: none;
-      color: white;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-    }
-  </style>
+  #counterScreen {
+    flex-grow: 1;
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 12rem;
+    font-weight: 900;
+    user-select: none;
+    color: white;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+</style>
 </head>
 <body>
   <div id="inputScreen">
@@ -171,7 +171,7 @@
     </div>
   </div>
 
-  <div id="counterScreen" style="display:none;">0</div>
+  <div id="counterScreen">0</div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -191,7 +191,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // UI Elements
     const inputScreen = document.getElementById('inputScreen');
     const counterScreen = document.getElementById('counterScreen');
     const nameInput = document.getElementById('nameInput');
@@ -207,7 +206,6 @@
     let userData = null;
     let lastTapTime = 0;
 
-    // Show/hide custom input if needed
     countInput.addEventListener('change', () => {
       if(countInput.value === 'custom') {
         customCountInput.style.display = 'block';
@@ -216,7 +214,6 @@
       }
     });
 
-    // Start button click handler
     startButton.onclick = () => {
       const name = nameInput.value.trim();
       const city = cityInput.value.trim();
@@ -245,10 +242,9 @@
       counterScreen.textContent = currentCount;
     };
 
-    // Tap counting logic with 2 seconds cooldown between taps
     counterScreen.addEventListener('click', () => {
       const now = Date.now();
-      if(now - lastTapTime < 2000) return; // ignore taps within 2 seconds
+      if(now - lastTapTime < 2000) return;
       lastTapTime = now;
 
       currentCount++;
@@ -256,16 +252,14 @@
       counterScreen.textContent = currentCount;
 
       if(currentCount >= targetCount) {
-        // Calculate metrics: slow, proper, fast taps
         let slow = 0, proper = 0, fast = 0;
         for(let i = 1; i < tapTimes.length; i++) {
-          const diff = (tapTimes[i] - tapTimes[i-1]) / 1000; // seconds
+          const diff = (tapTimes[i] - tapTimes[i-1]) / 1000;
           if(diff >= 7 && diff <= 10) proper++;
           else if(diff < 7) fast++;
           else slow++;
         }
 
-        // Save to Firebase
         const entryRef = push(ref(db, 'leaderboard'));
         entryRef.set({
           name: userData.name,
@@ -281,7 +275,6 @@
           `Session complete!\nProper: ${proper}\nFast: ${fast}\nSlow: ${slow}`
         );
 
-        // Reset UI
         counterScreen.style.display = 'none';
         inputScreen.style.display = 'block';
         nameInput.value = '';
@@ -291,13 +284,11 @@
       }
     });
 
-    // Real-time leaderboard update
     const leaderboardRef = ref(db, 'leaderboard');
     onValue(leaderboardRef, (snapshot) => {
       const data = snapshot.val();
       leaderboardBody.innerHTML = '';
       if(data) {
-        // Sort by properCount desc
         const entries = Object.values(data).sort((a, b) => b.properCount - a.properCount);
         entries.forEach(entry => {
           const tr = document.createElement('tr');
