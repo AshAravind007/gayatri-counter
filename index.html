@@ -1,72 +1,216 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gayatri Japam Counter</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gayatri Japam Counter</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 1rem;
+    text-align: center;
+  }
+  #leanback {
+    display: none;
+    font-size: 10rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    cursor: pointer;
+  }
+  #summary {
+    display: none;
+  }
+  input, select, button {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+  }
+  ul {
+    text-align: left;
+    max-width: 400px;
+    margin: 1rem auto;
+  }
+</style>
 </head>
 <body>
-  <h1>Gayatri Japam Counter</h1>
 
-  <input type="text" id="name" placeholder="Your Name" />
-  <input type="number" id="count" placeholder="Enter count" />
-  <button onclick="submitCount()">Submit</button>
+<h1>Gayatri Japam Counter</h1>
 
-  <h2>Leaderboard</h2>
-  <ul id="leaderboard"></ul>
+<div id="inputForm">
+  <input type="text" id="name" placeholder="Your Name" required /><br />
+  <input type="text" id="city" placeholder="Your City" required /><br />
+  <select id="targetCount">
+    <option value="108">108</option>
+    <option value="1008">1008</option>
+    <option value="custom">Custom</option>
+  </select><br />
+  <input type="number" id="customCount" placeholder="Enter custom count" style="display:none; width: 50%" min="1" /><br />
+  <button id="startBtn">Start</button>
+</div>
 
-  <!-- Firebase v9+ Modular CDN -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } 
-      from "https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore.js";
+<div id="leanback" tabindex="0"></div>
 
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
-      authDomain: "gayatri-japam-counter.firebaseapp.com",
-      databaseURL: "https://gayatri-japam-counter-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "gayatri-japam-counter",
-      storageBucket: "gayatri-japam-counter.firebasestorage.app",
-      messagingSenderId: "349097142038",
-      appId: "1:349097142038:web:adecc60bdcf58c4cf15237",
-      measurementId: "G-NRGGXQH0XV"
-    };
+<div id="summary">
+  <h2>Session Summary</h2>
+  <p id="summaryText"></p>
+  <button id="restartBtn">Restart</button>
+</div>
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
+<h2>Leaderboard</h2>
+<ul id="leaderboard"></ul>
 
-    // Submit count to Firestore
-    async function submitCount() {
-      const name = document.getElementById('name').value || "Anonymous";
-      const count = parseInt(document.getElementById('count').value);
-      if (!count) return alert("Please enter a number");
+<!-- Firebase v9+ Modular CDN -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore.js";
 
-      await addDoc(collection(db, "counts"), {
-        name: name,
-        count: count,
-        timestamp: Date.now()
-      });
+  const firebaseConfig = {
+    apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
+    authDomain: "gayatri-japam-counter.firebaseapp.com",
+    projectId: "gayatri-japam-counter",
+    storageBucket: "gayatri-japam-counter.appspot.com",
+    messagingSenderId: "349097142038",
+    appId: "1:349097142038:web:adecc60bdcf58c4cf15237",
+    measurementId: "G-NRGGXQH0XV"
+  };
 
-      document.getElementById('count').value = "";
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const inputForm = document.getElementById("inputForm");
+  const leanback = document.getElementById("leanback");
+  const summary = document.getElementById("summary");
+  const summaryText = document.getElementById("summaryText");
+  const leaderboard = document.getElementById("leaderboard");
+  const startBtn = document.getElementById("startBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const targetCountSelect = document.getElementById("targetCount");
+  const customCountInput = document.getElementById("customCount");
+
+  // Show custom count input only if "custom" selected
+  targetCountSelect.addEventListener("change", () => {
+    customCountInput.style.display = targetCountSelect.value === "custom" ? "inline-block" : "none";
+  });
+
+  let name = "";
+  let city = "";
+  let targetCount = 108;
+
+  let tapCount = 0;
+  let lastTapTime = 0;
+
+  let properCount = 0;
+  let quickCount = 0;
+  let slowCount = 0;
+
+  // Time limits in milliseconds
+  const MIN_TAP_INTERVAL = 2000; // 2 seconds between taps
+  const PROPER_LOWER = 7000;
+  const PROPER_UPPER = 10000;
+
+  startBtn.onclick = () => {
+    name = document.getElementById("name").value.trim() || "Anonymous";
+    city = document.getElementById("city").value.trim() || "Unknown City";
+
+    if(targetCountSelect.value === "custom") {
+      const val = parseInt(customCountInput.value);
+      if(!val || val < 1) {
+        alert("Please enter a valid custom count");
+        return;
+      }
+      targetCount = val;
+    } else {
+      targetCount = parseInt(targetCountSelect.value);
     }
 
-    // Make function global so button onclick works
-    window.submitCount = submitCount;
+    inputForm.style.display = "none";
+    leanback.style.display = "block";
+    leanback.focus();
 
-    // Live updating leaderboard
-    const q = query(collection(db, "counts"), orderBy("count", "desc"), limit(10));
-    onSnapshot(q, (snapshot) => {
-      const list = document.getElementById("leaderboard");
-      list.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        list.innerHTML += `<li>${data.name}: ${data.count}</li>`;
+    tapCount = 0;
+    lastTapTime = 0;
+    properCount = 0;
+    quickCount = 0;
+    slowCount = 0;
+
+    updateCountDisplay();
+  };
+
+  function updateCountDisplay() {
+    leanback.textContent = tapCount;
+  }
+
+  leanback.onclick = () => {
+    const now = Date.now();
+    if(now - lastTapTime < MIN_TAP_INTERVAL) {
+      return; // Ignore taps faster than 2 seconds
+    }
+    tapCount++;
+    // Calculate duration between taps
+    if(lastTapTime !== 0) {
+      const diff = now - lastTapTime;
+      if(diff >= PROPER_LOWER && diff <= PROPER_UPPER) properCount++;
+      else if(diff < PROPER_LOWER) quickCount++;
+      else slowCount++;
+    }
+    lastTapTime = now;
+
+    updateCountDisplay();
+
+    if(tapCount >= targetCount) {
+      // Show summary and submit to Firestore
+      leanback.style.display = "none";
+      showSummary();
+      submitSession();
+    }
+  };
+
+  function showSummary() {
+    summary.style.display = "block";
+    summaryText.innerHTML = `
+      Name: <b>${name}</b><br/>
+      City: <b>${city}</b><br/>
+      Target Count: <b>${targetCount}</b><br/>
+      Proper Japas: <b>${properCount}</b><br/>
+      Quick Japas: <b>${quickCount}</b><br/>
+      Slow Japas: <b>${slowCount}</b><br/>
+    `;
+  }
+
+  restartBtn.onclick = () => {
+    summary.style.display = "none";
+    inputForm.style.display = "block";
+    leanback.style.display = "none";
+  };
+
+  // Firestore: Submit session data
+  async function submitSession() {
+    try {
+      await addDoc(collection(db, "sessions"), {
+        name,
+        city,
+        targetCount,
+        properCount,
+        quickCount,
+        slowCount,
+        timestamp: Date.now()
       });
+    } catch (e) {
+      alert("Error saving session: " + e.message);
+    }
+  }
+
+  // Firestore: Live leaderboard showing top 10 by properCount desc
+  const q = query(collection(db, "sessions"), orderBy("properCount", "desc"), limit(10));
+  onSnapshot(q, (snapshot) => {
+    leaderboard.innerHTML = "";
+    snapshot.forEach(doc => {
+      const d = doc.data();
+      leaderboard.innerHTML += `<li><b>${d.name}</b> (${d.city}): ${d.properCount} / ${d.targetCount}</li>`;
     });
-  </script>
+  });
+
+</script>
 </body>
 </html>
