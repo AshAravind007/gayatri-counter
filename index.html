@@ -80,7 +80,8 @@
       text-shadow:
         0 3px 8px rgba(0,122,255,0.4),
         0 8px 15px rgba(0,122,255,0.25);
-      height: 80vh;
+      height: 100vh;
+      width: 100vw;
       line-height: 14rem;
       user-select: none;
       -webkit-user-select: none;
@@ -90,6 +91,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: fixed;  /* full screen overlay */
+      top: 0;
+      left: 0;
+      z-index: 9999;
     }
     #summary p {
       font-size: 1.3rem;
@@ -112,6 +117,7 @@
       margin: 0 auto 4rem auto;
       color: #111;
       font-size: 1.1rem;
+      min-height: 6rem;
     }
     #leaderboard li {
       border-bottom: 1px solid #ddd;
@@ -144,7 +150,7 @@
 
   <h1>Gayatri Japam Counter</h1>
 
-  <div id="inputForm">
+  <div id="inputForm" role="form" aria-label="Input your details">
     <input type="text" id="name" placeholder="Your Name" required autocomplete="off" />
     <input type="text" id="city" placeholder="Your City" required autocomplete="off" />
     <select id="targetCount" aria-label="Select number of chants">
@@ -156,9 +162,9 @@
     <button id="startBtn" aria-label="Start chanting">Start</button>
   </div>
 
-  <div id="leanback" tabindex="0" role="button" aria-live="polite"></div>
+  <div id="leanback" tabindex="0" role="button" aria-live="polite" aria-label="Tap to count chanting"></div>
 
-  <div id="summary" aria-live="polite" role="region" aria-label="Session summary">
+  <div id="summary" aria-live="polite" role="region" aria-label="Session summary" style="display:none;">
     <h2>Session Summary</h2>
     <p id="summaryText"></p>
     <button id="restartBtn" aria-label="Restart chanting">Restart</button>
@@ -168,9 +174,18 @@
   <ul id="leaderboard" aria-live="polite" role="list"></ul>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      query,
+      orderBy,
+      limit,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
+    // Your Firebase config (replace with yours)
     const firebaseConfig = {
       apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
       authDomain: "gayatri-japam-counter.firebaseapp.com",
@@ -248,7 +263,8 @@
       leanback.textContent = tapCount;
     }
 
-    leanback.onclick = () => {
+    leanback.onclick = (event) => {
+      event.preventDefault();
       const now = Date.now();
       if (now - lastTapTime < MIN_TAP_INTERVAL) {
         return;
@@ -306,14 +322,8 @@
       }
     }
 
+    // Live leaderboard sorted by properCount descending, limit 10
     const q = query(collection(db, "sessions"), orderBy("properCount", "desc"), limit(10));
     onSnapshot(q, (snapshot) => {
       leaderboard.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const d = doc.data();
-        leaderboard.innerHTML += `<li><strong>${d.name}</strong> (${d.city}): ${d.properCount} / ${d.targetCount}</li>`;
-      });
-    });
-  </script>
-</body>
-</html>
+      snapshot
