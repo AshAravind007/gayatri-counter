@@ -1,389 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Gayatri Japam Counter</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Text:wght@400;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gayatri Japam Counter</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%; width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: url('https://raw.githubusercontent.com/AshAravind007/gayatri-counter/main/assets/bg.webp') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
 
-  html, body {
-    margin: 0; padding: 0; height: 100%;
-    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-    background: url('https://applescoop.org/image/wallpapers/watch/colorful-burst-of-swirly-colors-abstract-21-09-2024-1726919980.webp') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-  }
+    #inputScreen {
+      margin-top: 3rem;
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255 255 255 / 0.1);
+      border-radius: 15px;
+      padding: 20px 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      backdrop-filter: blur(15px);
+      color: white;
+    }
 
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
-  }
+    #inputScreen label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
 
-  main#mainApp {
-    width: 100%;
-    max-width: 480px;
-    background: rgba(0,0,0,0.5);
-    border-radius: 20px;
-    padding: 20px;
-    box-sizing: border-box;
-    color: white;
-    display: flex;
-    flex-direction: column;
-  }
+    #inputScreen input, #inputScreen select {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 1.2rem;
+      background: rgba(255 255 255 / 0.15);
+      color: white;
+      outline: none;
+      font-weight: 600;
+      box-shadow: inset 0 0 5px rgb(255 255 255 / 0.3);
+      transition: background-color 0.3s ease;
+    }
+    #inputScreen input::placeholder {
+      color: rgba(255 255 255 / 0.6);
+    }
+    #inputScreen input:focus, #inputScreen select:focus {
+      background: rgba(255 255 255 / 0.3);
+    }
 
-  h1 {
-    font-weight: 700;
-    font-size: 2.8rem;
-    margin: 0 0 1rem;
-    text-align: center;
-  }
+    #inputScreen button {
+      width: 100%;
+      padding: 12px 0;
+      font-size: 1.2rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(45deg, #007aff, #00c6ff);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 122, 255, 0.5);
+      transition: background 0.3s ease;
+    }
+    #inputScreen button:hover {
+      background: linear-gradient(45deg, #005fcc, #00a3cc);
+    }
 
-  label {
-    display: block;
-    margin: 0.8rem 0 0.3rem;
-    font-weight: 600;
-  }
+    #leaderboard {
+      margin-top: 2rem;
+      width: 90%;
+      max-width: 600px;
+      background: rgba(255 255 255 / 0.1);
+      border-radius: 15px;
+      padding: 15px 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      backdrop-filter: blur(15px);
+      color: white;
+      max-height: 250px;
+      overflow-y: auto;
+      font-weight: 600;
+    }
 
-  input, select {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-  }
+    #leaderboard h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.4rem;
+      border-bottom: 1px solid rgba(255 255 255 / 0.3);
+      padding-bottom: 0.5rem;
+    }
 
-  button {
-    margin-top: 1.5rem;
-    padding: 0.8rem;
-    font-size: 1.3rem;
-    font-weight: 700;
-    border: none;
-    border-radius: 10px;
-    background: #f4f4f5;
-    color: #222;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
+    #leaderboard table {
+      width: 100%;
+      border-collapse: collapse;
+      color: white;
+    }
 
-  button:hover {
-    background: #ddd;
-  }
+    #leaderboard th, #leaderboard td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255 255 255 / 0.2);
+    }
 
-  #leaderboard {
-    margin-top: 1.5rem;
-    background: rgba(255 255 255 / 0.2);
-    border-radius: 15px;
-    padding: 1rem;
-    max-height: 180px;
-    overflow-y: auto;
-  }
-
-  #leaderboard h2 {
-    margin-top: 0; margin-bottom: 0.8rem;
-    font-weight: 700;
-    font-size: 1.5rem;
-    border-bottom: 2px solid white;
-    padding-bottom: 0.3rem;
-  }
-
-  #leaderboard ul {
-    margin: 0; padding: 0; list-style: none;
-  }
-
-  #leaderboard li {
-    margin-bottom: 0.3rem;
-    font-size: 1.1rem;
-    display: flex; justify-content: space-between;
-  }
-
-  /* FULL SCREEN COUNTER MODE */
-  #counterScreen {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    font-size: 14rem;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    cursor: pointer;
-    background: rgba(0,0,0,0.75);
-    color: white;
-    letter-spacing: 0.1em;
-    z-index: 1000;
-  }
-
-  #summaryScreen {
-    margin-top: 1rem;
-    background: rgba(255 255 255 / 0.15);
-    padding: 1rem;
-    border-radius: 15px;
-    display: none;
-  }
-
-  #summaryScreen h3 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-  }
-
-  #summaryScreen p {
-    margin: 0.3rem 0;
-    font-size: 1.1rem;
-  }
-
-  #restartBtn {
-    margin-top: 1rem;
-    padding: 0.7rem;
-    font-weight: 700;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    border: none;
-    background: #f4f4f5;
-    color: #222;
-    cursor: pointer;
-  }
-
-  #restartBtn:hover {
-    background: #ddd;
-  }
-</style>
+    #counterScreen {
+      flex-grow: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12rem;
+      font-weight: 900;
+      user-select: none;
+      color: white;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+  </style>
 </head>
 <body>
-<main id="mainApp">
-
-  <h1>Gayatri Japam Counter</h1>
-
-  <form id="inputForm">
+  <div id="inputScreen">
     <label for="nameInput">Name</label>
-    <input id="nameInput" type="text" placeholder="Your name" required autocomplete="off" />
+    <input type="text" id="nameInput" placeholder="Enter your name" autocomplete="off" />
 
     <label for="cityInput">City</label>
-    <input id="cityInput" type="text" placeholder="Your city" required autocomplete="off" />
+    <input type="text" id="cityInput" placeholder="Enter your city" autocomplete="off" />
 
-    <label for="countSelect">Select Count</label>
-    <select id="countSelect" required>
+    <label for="countInput">Number of Japam</label>
+    <select id="countInput">
       <option value="108">108</option>
-      <option value="1008" selected>1008</option>
+      <option value="1008">1008</option>
       <option value="custom">Custom</option>
     </select>
 
-    <input id="customCountInput" type="number" placeholder="Enter custom count" min="1" style="display:none; margin-top:10px;" />
+    <input
+      type="number"
+      id="customCountInput"
+      placeholder="Enter custom count"
+      style="display:none;"
+      min="1"
+    />
 
-    <button type="submit">Start Japam</button>
-  </form>
+    <button id="startButton">Start</button>
 
-  <div id="leaderboard">
-    <h2>Leaderboard</h2>
-    <ul id="leaderboardList">
-      <li>Loading...</li>
-    </ul>
+    <div id="leaderboard">
+      <h2>Leaderboard</h2>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>City</th><th>Proper Count</th></tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <!-- Dynamic leaderboard entries -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div id="counterScreen" tabindex="0" style="display:none;">0</div>
+  <div id="counterScreen" style="display:none;">0</div>
 
-  <section id="summaryScreen">
-    <h3>Session Summary</h3>
-    <p id="summaryProper"></p>
-    <p id="summaryFast"></p>
-    <p id="summarySlow"></p>
-    <button id="restartBtn">Restart</button>
-  </section>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-</main>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
+      authDomain: "gayatri-japam-counter.firebaseapp.com",
+      databaseURL: "https://gayatri-japam-counter-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "gayatri-japam-counter",
+      storageBucket: "gayatri-japam-counter.firebasestorage.app",
+      messagingSenderId: "349097142038",
+      appId: "1:349097142038:web:adecc60bdcf58c4cf15237",
+      measurementId: "G-NRGGXQH0XV"
+    };
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-<script>
-  // Your Firebase config (replace with your own)
-  const firebaseConfig = {
-    apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
-    authDomain: "gayatri-japam-counter.firebaseapp.com",
-    databaseURL: "https://gayatri-japam-counter-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "gayatri-japam-counter",
-    storageBucket: "gayatri-japam-counter.appspot.com",
-    messagingSenderId: "349097142038",
-    appId: "1:349097142038:web:adecc60bdcf58c4cf15237"
-  };
+    // UI Elements
+    const inputScreen = document.getElementById('inputScreen');
+    const counterScreen = document.getElementById('counterScreen');
+    const nameInput = document.getElementById('nameInput');
+    const cityInput = document.getElementById('cityInput');
+    const countInput = document.getElementById('countInput');
+    const customCountInput = document.getElementById('customCountInput');
+    const startButton = document.getElementById('startButton');
+    const leaderboardBody = document.getElementById('leaderboardBody');
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+    let targetCount = 108;
+    let tapTimes = [];
+    let currentCount = 0;
+    let userData = null;
+    let lastTapTime = 0;
 
-  // Elements
-  const inputForm = document.getElementById('inputForm');
-  const nameInput = document.getElementById('nameInput');
-  const cityInput = document.getElementById('cityInput');
-  const countSelect = document.getElementById('countSelect');
-  const customCountInput = document.getElementById('customCountInput');
-  const counterScreen = document.getElementById('counterScreen');
-  const leaderboardList = document.getElementById('leaderboardList');
-  const summaryScreen = document.getElementById('summaryScreen');
-  const summaryProper = document.getElementById('summaryProper');
-  const summaryFast = document.getElementById('summaryFast');
-  const summarySlow = document.getElementById('summarySlow');
-  const restartBtn = document.getElementById('restartBtn');
+    // Show/hide custom input if needed
+    countInput.addEventListener('change', () => {
+      if(countInput.value === 'custom') {
+        customCountInput.style.display = 'block';
+      } else {
+        customCountInput.style.display = 'none';
+      }
+    });
 
-  // Tap timing thresholds (milliseconds)
-  const MIN_TAP_INTERVAL = 2000;
-  const PROPER_LOWER = 7000;
-  const PROPER_UPPER = 10000;
-
-  let isCounting = false;
-  let tapCount = 0;
-  let lastTapTime = 0;
-  let properCount = 0;
-  let quickCount = 0;
-  let slowCount = 0;
-  let targetCount = 1008;
-  let userName = '';
-  let userCity = '';
-
-  // Show/hide custom count input
-  countSelect.addEventListener('change', () => {
-    if(countSelect.value === 'custom'){
-      customCountInput.style.display = 'block';
-      customCountInput.required = true;
-    } else {
-      customCountInput.style.display = 'none';
-      customCountInput.required = false;
-    }
-  });
-
-  // Handle form submit
-  inputForm.addEventListener('submit', e => {
-    e.preventDefault();
-
-    userName = nameInput.value.trim() || "Anonymous";
-    userCity = cityInput.value.trim() || "Unknown";
-
-    if(countSelect.value === 'custom') {
-      const customVal = parseInt(customCountInput.value);
-      if(!customVal || customVal < 1){
-        alert("Please enter a valid custom count.");
+    // Start button click handler
+    startButton.onclick = () => {
+      const name = nameInput.value.trim();
+      const city = cityInput.value.trim();
+      if(!name || !city) {
+        alert("Please enter both name and city.");
         return;
       }
-      targetCount = customVal;
-    } else {
-      targetCount = parseInt(countSelect.value);
-    }
-
-    // Reset counters
-    tapCount = 0;
-    lastTapTime = 0;
-    properCount = 0;
-    quickCount = 0;
-    slowCount = 0;
-
-    // Hide form and leaderboard, show counter screen full screen
-    inputForm.style.display = 'none';
-    leaderboardList.parentElement.style.display = 'none';
-    summaryScreen.style.display = 'none';
-    counterScreen.style.display = 'flex';
-    counterScreen.textContent = '0';
-    counterScreen.focus();
-
-    isCounting = true;
-  });
-
-  // Tap counter logic
-  counterScreen.addEventListener('click', () => {
-    if(!isCounting) return;
-    const now = Date.now();
-    if(now - lastTapTime < MIN_TAP_INTERVAL) return;
-
-    tapCount++;
-    if(lastTapTime !== 0){
-      const diff = now - lastTapTime;
-      if(diff >= PROPER_LOWER && diff <= PROPER_UPPER){
-        properCount++;
-      } else if(diff < PROPER_LOWER){
-        quickCount++;
+      if(countInput.value === 'custom') {
+        const customVal = parseInt(customCountInput.value);
+        if(!customVal || customVal < 1) {
+          alert("Please enter a valid custom count.");
+          return;
+        }
+        targetCount = customVal;
       } else {
-        slowCount++;
+        targetCount = parseInt(countInput.value);
       }
-    }
-    lastTapTime = now;
 
-    counterScreen.textContent = tapCount;
+      userData = { name, city, targetCount };
+      currentCount = 0;
+      tapTimes = [];
+      lastTapTime = 0;
 
-    if(tapCount >= targetCount){
-      isCounting = false;
-      showSummary();
-      submitToLeaderboard();
-    }
-  });
+      inputScreen.style.display = 'none';
+      counterScreen.style.display = 'flex';
+      counterScreen.textContent = currentCount;
+    };
 
-  // Show summary after completion
-  function showSummary(){
-    counterScreen.style.display = 'none';
-    summaryScreen.style.display = 'block';
+    // Tap counting logic with 2 seconds cooldown between taps
+    counterScreen.addEventListener('click', () => {
+      const now = Date.now();
+      if(now - lastTapTime < 2000) return; // ignore taps within 2 seconds
+      lastTapTime = now;
 
-    summaryProper.textContent = `Proper Japams: ${properCount}`;
-    summaryFast.textContent = `Too Fast: ${quickCount}`;
-    summarySlow.textContent = `Too Slow: ${slowCount}`;
-  }
+      currentCount++;
+      tapTimes.push(now);
+      counterScreen.textContent = currentCount;
 
-  // Restart
-  restartBtn.addEventListener('click', () => {
-    summaryScreen.style.display = 'none';
-    inputForm.style.display = 'block';
-    leaderboardList.parentElement.style.display = 'block';
-    counterScreen.style.display = 'none';
-    tapCount = 0;
-    lastTapTime = 0;
-    properCount = 0;
-    quickCount = 0;
-    slowCount = 0;
-    isCounting = false;
-  });
+      if(currentCount >= targetCount) {
+        // Calculate metrics: slow, proper, fast taps
+        let slow = 0, proper = 0, fast = 0;
+        for(let i = 1; i < tapTimes.length; i++) {
+          const diff = (tapTimes[i] - tapTimes[i-1]) / 1000; // seconds
+          if(diff >= 7 && diff <= 10) proper++;
+          else if(diff < 7) fast++;
+          else slow++;
+        }
 
-  // Submit user session to Firebase Realtime Database leaderboard
-  function submitToLeaderboard(){
-    const leaderboardRef = db.ref('leaderboard');
-    leaderboardRef.push({
-      name: userName,
-      city: userCity,
-      count: properCount,
-      timestamp: Date.now()
-    });
-  }
+        // Save to Firebase
+        const entryRef = push(ref(db, 'leaderboard'));
+        entryRef.set({
+          name: userData.name,
+          city: userData.city,
+          properCount: proper,
+          slowCount: slow,
+          fastCount: fast,
+          targetCount: userData.targetCount,
+          timestamp: Date.now()
+        });
 
-  // Fetch & display live leaderboard (top 10)
-  function updateLeaderboard(snapshot){
-    leaderboardList.innerHTML = '';
-    if(!snapshot || snapshot.exists() === false){
-      leaderboardList.innerHTML = '<li>No entries yet</li>';
-      return;
-    }
+        alert(
+          `Session complete!\nProper: ${proper}\nFast: ${fast}\nSlow: ${slow}`
+        );
 
-    // Convert snapshot to array, sort by count desc, timestamp asc (earlier better)
-    const data = [];
-    snapshot.forEach(childSnapshot => {
-      data.push(childSnapshot.val());
+        // Reset UI
+        counterScreen.style.display = 'none';
+        inputScreen.style.display = 'block';
+        nameInput.value = '';
+        cityInput.value = '';
+        customCountInput.value = '';
+        countInput.value = '108';
+      }
     });
 
-    data.sort((a,b) => {
-      if(b.count !== a.count) return b.count - a.count;
-      return a.timestamp - b.timestamp;
+    // Real-time leaderboard update
+    const leaderboardRef = ref(db, 'leaderboard');
+    onValue(leaderboardRef, (snapshot) => {
+      const data = snapshot.val();
+      leaderboardBody.innerHTML = '';
+      if(data) {
+        // Sort by properCount desc
+        const entries = Object.values(data).sort((a, b) => b.properCount - a.properCount);
+        entries.forEach(entry => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${entry.name}</td><td>${entry.city}</td><td>${entry.properCount} / ${entry.targetCount}</td>`;
+          leaderboardBody.appendChild(tr);
+        });
+      }
     });
-
-    data.slice(0,10).forEach(entry => {
-      const li = document.createElement('li');
-      li.textContent = `${entry.name} (${entry.city}) - ${entry.count}`;
-      leaderboardList.appendChild(li);
-    });
-  }
-
-  // Listen for changes on leaderboard
-  const leaderboardRef = db.ref('leaderboard');
-  leaderboardRef.on('value', updateLeaderboard);
-</script>
+  </script>
 </body>
 </html>
