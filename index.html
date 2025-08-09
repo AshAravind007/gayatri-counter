@@ -1,338 +1,114 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gayatri Japam Counter</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    /* Global Styles */
     body {
       margin: 0;
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      background: linear-gradient(135deg, #8e9eab, #eef2f3, #8e9eab);
-      color: #1d1d1f;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: url('https://applescoop.org/image/wallpapers/watch/colorful-burst-of-swirly-colors-abstract-21-09-2024-1726919980.webp') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: 2rem;
-      user-select: none;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
     }
     h1 {
-      font-weight: 600;
-      font-size: 2.8rem;
+      font-size: 3rem;
       margin-bottom: 1rem;
-      color: #111;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    #inputForm, #summary {
-      background: rgba(255 255 255 / 0.85);
+    #counter {
+      font-size: 5rem;
+      font-weight: bold;
+      margin: 2rem;
       padding: 2rem;
+      background: rgba(0, 0, 0, 0.5);
       border-radius: 1rem;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
-      margin-bottom: 2rem;
-      text-align: center;
-      transition: opacity 0.3s ease;
-    }
-    input[type="text"], input[type="number"], select {
-      width: 100%;
-      padding: 1rem 1.2rem;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      border: 1px solid #c8c7cc;
-      border-radius: 12px;
-      outline-offset: 2px;
-      outline-color: #007aff;
-      transition: border-color 0.3s ease;
-    }
-    input[type="text"]:focus, input[type="number"]:focus, select:focus {
-      border-color: #007aff;
-    }
-    button {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: white;
-      background: #007aff;
-      border: none;
-      border-radius: 14px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 8px 15px rgba(0,122,255,0.3);
-    }
-    button:hover {
-      background: #005ecb;
-      box-shadow: 0 10px 20px rgba(0,94,203,0.5);
-    }
-    #leanback {
-      display: none;
-      font-size: 14rem;
-      font-weight: 800;
-      color: #007aff;
-      text-shadow:
-        0 3px 8px rgba(0,122,255,0.4),
-        0 8px 15px rgba(0,122,255,0.25);
-      height: 100vh;
-      width: 100vw;
-      line-height: 14rem;
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      cursor: pointer;
-      transition: color 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: fixed;  
-      top: 0;
-      left: 0;
-      z-index: 9999;
-    }
-    #summary p {
-      font-size: 1.3rem;
-      line-height: 1.6;
-      color: #222;
-    }
-    #summary h2 {
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: #111;
     }
     #leaderboard {
-      max-width: 400px;
-      width: 100%;
-      background: rgba(255 255 255 / 0.85);
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      padding: 1rem 2rem;
-      list-style: none;
-      margin: 0 auto 4rem auto;
-      color: #111;
-      font-size: 1.1rem;
-      min-height: 6rem;
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 1rem;
+      max-height: 300px;
       overflow-y: auto;
-      max-height: 250px;
+      width: 80%;
+    }
+    #leaderboard ul {
+      list-style-type: none;
+      padding: 0;
     }
     #leaderboard li {
-      border-bottom: 1px solid #ddd;
-      padding: 0.5rem 0;
-    }
-    #leaderboard li:last-child {
-      border-bottom: none;
-    }
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 2rem;
-      }
-      #leanback {
-        font-size: 8rem;
-        height: 60vh;
-        line-height: 8rem;
-      }
-      #inputForm, #summary, #leaderboard {
-        max-width: 95vw;
-        padding: 1.5rem;
-      }
-      input[type="text"], input[type="number"], select, button {
-        font-size: 1rem;
-        padding: 0.75rem 1rem;
-      }
+      margin: 0.5rem 0;
     }
   </style>
 </head>
 <body>
 
   <h1>Gayatri Japam Counter</h1>
-
-  <div id="inputForm" role="form" aria-label="Input your details">
-    <input type="text" id="name" placeholder="Your Name" required autocomplete="off" />
-    <input type="text" id="city" placeholder="Your City" required autocomplete="off" />
-    <select id="targetCount" aria-label="Select number of chants">
-      <option value="108">108</option>
-      <option value="1008">1008</option>
-      <option value="custom">Custom</option>
-    </select>
-    <input type="number" id="customCount" placeholder="Enter custom count" style="display:none;" min="1" autocomplete="off" />
-    <button id="startBtn" aria-label="Start chanting">Start</button>
+  <div id="counter" onclick="incrementCounter()">0</div>
+  <div id="leaderboard">
+    <h2>Leaderboard</h2>
+    <ul id="leaderboardList"></ul>
   </div>
 
-  <div id="leanback" tabindex="0" role="button" aria-live="polite" aria-label="Tap to count chanting"></div>
-
-  <div id="summary" aria-live="polite" role="region" aria-label="Session summary" style="display:none;">
-    <h2>Session Summary</h2>
-    <p id="summaryText"></p>
-    <button id="restartBtn" aria-label="Restart chanting">Restart</button>
-  </div>
-
-  <h2>Leaderboard</h2>
-  <ul id="leaderboard" aria-live="polite" role="list"></ul>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      query,
-      orderBy,
-      limit,
-      onSnapshot
-    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
+  <script>
+    // Initialize Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyA9FlBdTJOUEC11Rw9FFw9z0N1OrpPaJAo",
-      authDomain: "gayatri-japam-counter.firebaseapp.com",
-      projectId: "gayatri-japam-counter",
-      storageBucket: "gayatri-japam-counter.appspot.com",
-      messagingSenderId: "349097142038",
-      appId: "1:349097142038:web:adecc60bdcf58c4cf15237",
-      measurementId: "G-NRGGXQH0XV"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    // Counter and Leaderboard Variables
+    let counter = 0;
+    const leaderboardList = document.getElementById('leaderboardList');
 
-    const inputForm = document.getElementById("inputForm");
-    const leanback = document.getElementById("leanback");
-    const summary = document.getElementById("summary");
-    const summaryText = document.getElementById("summaryText");
-    const leaderboard = document.getElementById("leaderboard");
-    const startBtn = document.getElementById("startBtn");
-    const restartBtn = document.getElementById("restartBtn");
-    const targetCountSelect = document.getElementById("targetCount");
-    const customCountInput = document.getElementById("customCount");
-
-    targetCountSelect.addEventListener("change", () => {
-      customCountInput.style.display = targetCountSelect.value === "custom" ? "block" : "none";
-    });
-
-    let name = "";
-    let city = "";
-    let targetCount = 108;
-
-    let tapCount = 0;
-    let lastTapTime = 0;
-
-    let properCount = 0;
-    let quickCount = 0;
-    let slowCount = 0;
-
-    const MIN_TAP_INTERVAL = 2000;
-    const PROPER_LOWER = 7000;
-    const PROPER_UPPER = 10000;
-
-    startBtn.onclick = () => {
-      name = document.getElementById("name").value.trim() || "Anonymous";
-      city = document.getElementById("city").value.trim() || "Unknown City";
-
-      if (targetCountSelect.value === "custom") {
-        const val = parseInt(customCountInput.value);
-        if (!val || val < 1) {
-          alert("Please enter a valid custom count");
-          return;
-        }
-        targetCount = val;
-      } else {
-        targetCount = parseInt(targetCountSelect.value);
-      }
-
-      inputForm.style.opacity = 0;
-      setTimeout(() => {
-        inputForm.style.display = "none";
-        leanback.style.display = "flex";
-        leanback.focus();
-
-        tapCount = 0;
-        lastTapTime = 0;
-        properCount = 0;
-        quickCount = 0;
-        slowCount = 0;
-
-        updateCountDisplay();
-      }, 300);
-    };
-
-    function updateCountDisplay() {
-      leanback.textContent = tapCount;
+    // Increment Counter
+    function incrementCounter() {
+      counter++;
+      document.getElementById('counter').innerText = counter;
+      updateLeaderboard();
     }
 
-    leanback.onclick = (event) => {
-      event.preventDefault();
-      const now = Date.now();
-      if (now - lastTapTime < MIN_TAP_INTERVAL) {
-        return;
-      }
-      tapCount++;
-      if (lastTapTime !== 0) {
-        const diff = now - lastTapTime;
-        if (diff >= PROPER_LOWER && diff <= PROPER_UPPER) properCount++;
-        else if (diff < PROPER_LOWER) quickCount++;
-        else slowCount++;
-      }
-      lastTapTime = now;
-
-      updateCountDisplay();
-
-      if (tapCount >= targetCount) {
-        leanback.style.display = "none";
-        showSummary();
-        submitSession();
-      }
-    };
-
-    function showSummary() {
-      summary.style.display = "block";
-      summaryText.innerHTML = `
-        Name: <strong>${name}</strong><br />
-        City: <strong>${city}</strong><br />
-        Target Count: <strong>${targetCount}</strong><br />
-        Proper Japas: <strong>${properCount}</strong><br />
-        Quick Japas: <strong>${quickCount}</strong><br />
-        Slow Japas: <strong>${slowCount}</strong>
-      `;
-    }
-
-    restartBtn.onclick = () => {
-      summary.style.display = "none";
-      inputForm.style.display = "block";
-      inputForm.style.opacity = 1;
-      leanback.style.display = "none";
-    };
-
-    async function submitSession() {
-      try {
-        await addDoc(collection(db, "sessions"), {
-          name,
-          city,
-          targetCount,
-          properCount,
-          quickCount,
-          slowCount,
-          timestamp: Date.now(),
+    // Update Leaderboard
+    function updateLeaderboard() {
+      db.collection("leaderboard").orderBy("count", "desc").limit(5).get()
+        .then(snapshot => {
+          leaderboardList.innerHTML = '';
+          snapshot.forEach(doc => {
+            const li = document.createElement('li');
+            li.textContent = `${doc.data().name}: ${doc.data().count}`;
+            leaderboardList.appendChild(li);
+          });
         });
-      } catch (e) {
-        alert("Error saving session: " + e.message);
-      }
     }
 
-    // Live leaderboard sorted by properCount descending, limit 10
-    const q = query(collection(db, "sessions"), orderBy("properCount", "desc"), limit(10));
-    onSnapshot(q, (snapshot) => {
-      leaderboard.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const li = document.createElement("li");
-        li.textContent = `${data.name} (${data.city}) — Proper Japas: ${data.properCount} / ${data.targetCount}`;
-        leaderboard.appendChild(li);
+    // Submit Score
+    function submitScore(name) {
+      db.collection("leaderboard").add({
+        name: name,
+        count: counter
+      }).then(() => {
+        updateLeaderboard();
       });
-    });
+    }
+
+    // Listen for changes in the leaderboard
+    db.collection("leaderboard").onSnapshot(updateLeaderboard);
   </script>
+
 </body>
 </html>
