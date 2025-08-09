@@ -17,20 +17,22 @@
 
   body {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
+    padding: 2rem;
   }
 
   main#mainApp {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    width: 100%;
     max-width: 480px;
-    margin: 2rem auto 3rem;
     background: rgba(0,0,0,0.5);
     border-radius: 20px;
     padding: 20px;
-    z-index: 10;
+    box-sizing: border-box;
+    color: white;
+    display: flex;
+    flex-direction: column;
   }
 
   h1 {
@@ -103,7 +105,7 @@
   #counterScreen {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    font-size: 12rem;
+    font-size: 14rem;
     font-weight: 900;
     display: flex;
     align-items: center;
@@ -114,7 +116,6 @@
     color: white;
     letter-spacing: 0.1em;
     z-index: 1000;
-    flex-direction: column;
   }
 
   #summaryScreen {
@@ -151,7 +152,6 @@
   #restartBtn:hover {
     background: #ddd;
   }
-
 </style>
 </head>
 <body>
@@ -384,7 +384,6 @@
   // Listen for changes on leaderboard
   const leaderboardRef = db.ref('leaderboard');
   leaderboardRef.on('value', updateLeaderboard);
-
 </script>
 </body>
 </html>
